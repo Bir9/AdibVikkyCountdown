@@ -34,6 +34,8 @@ def timeDifference(start, end):
                 months += 12
             else:
                 return print("user input error")
+    else:
+        return print("user input error")
             
     for i in range(months):
         j = i + monthDict[startDate[0]]
@@ -44,33 +46,30 @@ def timeDifference(start, end):
     minutes = int(endTime[1]) - int(startTime[1])
     seconds = int(endTime[2]) - int(startTime[2])
     
-    if years >= 0:
-        if days < 0:
-            if years > 0:
-                years -= 1
-                days += 365
-            else:
-                return print("user input error")
-        if hours < 0:
-            if days > 0:
-                days -= 1
-                hours += 24
-            else:
-                return print("user input error")
-        if minutes < 0:
-            if hours > 0:
-                hours -= 1
-                minutes += 60
-            else:
-                return print("user input error")
-        if seconds < 0:
-            if minutes > 0:
-                minutes -= 1
-                seconds += 60
-            else:
-                return print("user input error")
-    else:
-        return print("user input error")
+    if days < 0:
+        if years > 0:
+            years -= 1
+            days += 365
+        else:
+            return print("user input error")
+    if hours < 0:
+        if days > 0:
+            days -= 1
+            hours += 24
+        else:
+            return print("user input error")
+    if minutes < 0:
+        if hours > 0:
+            hours -= 1
+            minutes += 60
+        else:
+            return print("user input error")
+    if seconds < 0:
+        if minutes > 0:
+            minutes -= 1
+            seconds += 60
+        else:
+            return print("user input error")
     
     print(f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds left")
 
