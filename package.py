@@ -13,3 +13,14 @@ monthDict = {
     "Dec" : 12
 
 }
+
+def timeSplit(time):
+    fullSplit = time.split(',')
+
+    chronoSplit = fullSplit[0].split(':')
+
+    dateSplit = fullSplit[1].split(' ')
+
+    print(fullSplit, dateSplit, chronoSplit)
+
+timeSplit("09:52:14, Apr 04, 2022")
