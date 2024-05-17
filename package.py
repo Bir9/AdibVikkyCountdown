@@ -1,5 +1,3 @@
-from time import sleep
-
 monthDict = {
     "Jan" : 1, "Feb" : 2, "Mar" : 3, "Apr" : 4,
     "May" : 5, "Jun" : 6, "Jul" : 7, "Aug" : 8,
@@ -74,35 +72,28 @@ def timeDifference(start, end):
             seconds += 60
         else:
             return print("user input error")
-        
-    print(f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds")
     
-    while seconds - 1 >= 0:
-        years, days, hours, minutes, seconds = countdownTimer(years, days, hours, minutes, seconds)
-        print(f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds")
+    return years, days, hours, minutes, seconds
 
-def countdownTimer(years, days, hours, minutes, seconds):
+def timerDecreaser():
+    global years, days, hours, minutes, seconds
     if seconds != 0:
         seconds -= 1
-        sleep(1)
     else:
         if minutes != 0:
             minutes -= 1
             seconds = 59
-            sleep(1)
         else:
             if hours!= 0:
                 hours -= 1
                 minutes = 59
                 seconds = 59
-                sleep(1)
             else:
                 if days!= 0:
                     days -= 1
                     hours = 23
                     minutes = 59
                     seconds = 59
-                    sleep(1)
                 else:
                     if years!= 0:
                         years -= 1
@@ -110,7 +101,6 @@ def countdownTimer(years, days, hours, minutes, seconds):
                         hours = 23
                         minutes = 59
                         seconds = 59
-                        sleep(1)
                     else:
                         return print("user input error")
     return years, days, hours, minutes, seconds
