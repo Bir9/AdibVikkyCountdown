@@ -11,16 +11,18 @@ monthDict = {
     "Oct" : 10,
     "Nov" : 11,
     "Dec" : 12
-
 }
 
 def timeSplit(time):
     fullSplit = time.split(',')
-
     chronoSplit = fullSplit[0].split(':')
-
     dateSplit = fullSplit[1].split(' ')
 
-    print(fullSplit, dateSplit, chronoSplit)
-
-timeSplit("09:52:14, Apr 04, 2022")
+def checkLeapYear(year):
+    if year % 4 == 0:
+        if year % 400 == 0:
+            return True
+        else:
+            return False
+    else:
+        return False
