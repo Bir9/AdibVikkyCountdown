@@ -73,8 +73,6 @@ def timeDifference(start, end):
     
     print(f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds left")
 
-timeDifference( "05:50:50, Nov 1, 2024", "18:01:30, Oct 16, 2025")
-
 def checkLeapYear(year):
     if year % 4 == 0:
         if year % 400 == 0:
