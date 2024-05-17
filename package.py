@@ -7,12 +7,10 @@ monthDict = {
 daysInMonthDict = {
     "1": 31, "2": 28, "3": 31, "4": 30,
     "5": 31, "6": 30, "7": 31, "8": 31,
-    "9": 30, "10": 31, "11": 30, "12": 31
+    "9": 30, "10": 31, "11": 30, "0": 31 #0 was used as the key as 12%12 = 0
 }
 
 def timeDifference(start, end):
-    timeDiff = []
-    
     startSplit = start.split(',')
     for i in range(len(startSplit)):
         startSplit[i] = startSplit[i].strip()
@@ -25,7 +23,7 @@ def timeDifference(start, end):
     endTime = endSplit[0].split(':')
     endDate = endSplit[1].split(' ')
     
-    years = int(endSplit[-1]) - int(startSplit[-1])
+    years = int(endSplit[2]) - int(startSplit[2])
     months = monthDict[endDate[0]] - monthDict[startDate[0]]
     days = 0
     
@@ -76,7 +74,7 @@ def timeDifference(start, end):
     
     print(f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds left")
 
-timeDifference( "09:52:14, May 04, 2022", "14:20:00, Jun 27, 2022")
+timeDifference( "05:50:50, Nov 1, 2024", "18:01:30, Oct 16, 2025")
 
 def checkLeapYear(year):
     if year % 4 == 0:
