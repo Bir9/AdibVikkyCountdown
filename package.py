@@ -13,10 +13,25 @@ monthDict = {
     "Dec" : 12
 }
 
-def timeSplit(time):
-    fullSplit = time.split(',')
-    chronoSplit = fullSplit[0].split(':')
-    dateSplit = fullSplit[1].split(' ')
+def timeDifference(start, end):
+    timeDiff = []
+    
+    startSplit = start.split(',')
+    for i in range(len(startSplit)):
+        startSplit[i] = startSplit[i].strip()
+    startTime = startSplit[0].split(':')
+    startDate = startSplit[1].split(' ')
+    
+    endSplit = end.split(',')
+    for i in range(len(endSplit)):
+        endSplit[i] = endSplit[i].strip()
+    endTime = endSplit[0].split(':')
+    endDate = endSplit[1].split(' ')
+    
+    print(startSplit, startTime, startDate)
+    print(endSplit, endTime, endDate)
+
+timeDifference("09:52:14, Apr 04, 2022", "12:32:59, Jan 20, 2025")
 
 def checkLeapYear(year):
     if year % 4 == 0:
