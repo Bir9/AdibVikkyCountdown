@@ -13,7 +13,8 @@ def timeDifference(start, end):
     
     global years, days, hours, minutes, seconds #making variable global so other functions can use them
     
-    years = int(endDate[2]) - int(endDate[2]) #getting the difference in years between both dates
+    years = int(endDate[2]) - int(startDate[2]) #getting the difference in years between both dates
+    print(years)
     months = int(endDate[0]) - int(startDate[0]) #getting the difference in months between both dates
     days = 0 #creating a days variable
     
@@ -63,6 +64,7 @@ def timeDifference(start, end):
         else:
             return print("user input error")
     
+    print(years, days, hours, minutes, seconds)
     return years, days, hours, minutes, seconds
 
 #keeps decreases the seconds by one if possible, otherwise we check if we can carry seconds over from minutes, hours, days and years

@@ -76,6 +76,7 @@ def start_countdown_timer():
     if start_date == end_date:
         years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
     else:
+        print(start_date, end_date)
         years, days, hours, minutes, seconds = timeDifference(start_date, end_date)
 
     while seconds != -1:  # Keep running the loop until there are 0 seconds left
