@@ -1,8 +1,4 @@
-monthDict = {
-    "Jan" : 1, "Feb" : 2, "Mar" : 3, "Apr" : 4,
-    "May" : 5, "Jun" : 6, "Jul" : 7, "Aug" : 8,
-    "Sep" : 9, "Oct" : 10, "Nov" : 11, "Dec" : 12
-}
+from time import sleep
 
 daysInMonthDict = {
     "1": 31, "2": 28, "3": 31, "4": 30,
@@ -11,23 +7,14 @@ daysInMonthDict = {
 }
 
 def timeDifference(start, end):
-    startSplit = start.split(',') #Splitting apart the input by its commas
-    for i in range(len(startSplit)): #Removing the blank spaces before and after each element in startSplit
-        startSplit[i] = startSplit[i].strip()
-    startTime = startSplit[0].split(':') #Seperating the hours, minutes and seconds into another list
-    startDate = startSplit[1].split(' ') #Seperating the month and day into another list
+    startDate = start[0].split('/') #Seperating the month, day and year into another list
     
-    #Similar to code above but for end date
-    endSplit = end.split(',') 
-    for i in range(len(endSplit)):
-        endSplit[i] = endSplit[i].strip()
-    endTime = endSplit[0].split(':')
-    endDate = endSplit[1].split(' ')
+    endDate = end[0].split('/') #Similar to code above but for end date
     
     global years, days, hours, minutes, seconds #making variable global so other functions can use them
     
-    years = int(endSplit[2]) - int(startSplit[2]) #getting the difference in years between both dates
-    months = monthDict[endDate[0]] - monthDict[startDate[0]] #getting the difference in months between both dates
+    years = int(endDate[2]) - int(endDate[2]) #getting the difference in years between both dates
+    months = int(endDate[0]) - int(startDate[0]) #getting the difference in months between both dates
     days = 0 #creating a days variable
     
     if years >= 0: #checking to see if the end date's year is after the start date's year
@@ -42,13 +29,13 @@ def timeDifference(start, end):
     
     #adds up all the days in every month between our start month and end month
     for i in range(months): #looping for however many months there are in between both dates
-        j = i + monthDict[startDate[0]] #assigning j to be our index i plus our starting month number (0 + Jan(1) => Jan(1), 1 + Jan(1) => Feb(2))
+        j = i + int(startDate[0]) #assigning j to be our index i plus our starting month number (0 + Jan(1) => Jan(1), 1 + Jan(1) => Feb(2))
         days += daysInMonthDict[str(j%12)] #makes sure that even if j > 12 it can still be used as a key
     
     days += int(endDate[1]) - int(startDate[1]) #getting the difference in days between both dates and adding it to our pre-existing variable
-    hours = int(endTime[0]) - int(startTime[0]) #getting the difference in hours between both dates
-    minutes = int(endTime[1]) - int(startTime[1]) #getting the difference in minutes between both dates
-    seconds = int(endTime[2]) - int(startTime[2]) #getting the difference in seconds between both dates
+    hours = int(end[1]) - int(start[1]) #getting the difference in hours between both dates
+    minutes = int(end[2]) - int(start[2]) #getting the difference in minutes between both dates
+    seconds = int(end[3]) - int(start[3]) #getting the difference in seconds between both dates
     
     #Similar to what we did for checking if our end date's month is before our start date's month we now do it for the days, hours, minutes, and seconds variables
     if days < 0:
