@@ -32,18 +32,18 @@ def timeDifference(start, end):
     seconds = int(end[3]) - int(start[3]) # Getting the difference in seconds between both dates
     
     # Similar to what we did for checking if our end date's month is before our start date's month we now do it for the days, hours, minutes, and seconds variables
-    if days < 0:
-        years -= 1
-        days += 365
-    if hours < 0:
-        days -= 1
-        hours += 24
-    if minutes < 0:
-        hours -= 1
-        minutes += 60
     if seconds < 0:
         minutes -= 1
         seconds += 60
+    if minutes < 0:
+        hours -= 1
+        minutes += 60
+    if hours < 0:
+        days -= 1
+        hours += 24
+    if days < 0:
+        years -= 1
+        days += 365
     
     return years, days, hours, minutes, seconds
 
