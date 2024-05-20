@@ -8,7 +8,9 @@ from datetime import datetime
 ws = Tk()
 ws.title("Countdown Timer")
 ws.geometry("800x500")
+ws.minsize(800, 500)
 ws.config(bg="#1B263B")
+ws.resizable(width=1000, height=700)
 
 # Fonts and colors
 f = ('Lexend', 20)
@@ -141,7 +143,7 @@ welcome_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 # Date picker frame for start date
 date_picker_frame = Frame(ws, bg=bg_color)
 start_cal = Calendar(date_picker_frame, selectmode="day", year=2024, month=5, day=1, font=("Lexend", 21), background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
-start_cal.grid(column=0, row=0, padx=130, pady=(40, 0))
+start_cal.grid(column=0, row=0, padx=130, pady=(15, 0))
 
 time_units_frame = Frame(date_picker_frame, bg=bg_color)
 time_units_frame.grid(column=0, row=1)
