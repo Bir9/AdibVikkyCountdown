@@ -24,6 +24,10 @@ def start_program():
     welcome_frame.pack_forget()
     date_picker_frame.pack()
 
+def restart_program():
+    result_frame.pack_forget()
+    date_picker_frame.pack()
+
 # Function to exit the program
 def exit_program():
     ws.destroy()
@@ -72,11 +76,10 @@ def confirm_end_date():
 
 def start_countdown_timer():
     global start_date, end_date
-
+    
     if start_date == end_date:
         years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
     else:
-        print(start_date, end_date)
         years, days, hours, minutes, seconds = timeDifference(start_date, end_date)
 
     while seconds != -1:  # Keep running the loop until there are 0 seconds left
@@ -90,6 +93,9 @@ def start_countdown_timer():
         time_str = f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds"
         timer_display.config(text=time_str)
         timer_display.pack()
+        
+        restart_btn.pack()
+        exit_timer_btn.pack()
 
         ws.update()
         sleep(1)
@@ -98,31 +104,29 @@ def start_countdown_timer():
 def update_time_limits(*args):
     end_date_str = end_cal.get_date()
     end_date_time = datetime.strptime(end_date_str, "%m/%d/%y")
+    
     if end_date_time.date() == start_date_obj.date():
         end_hour_sb.config(from_=int(start_date[1]), to=23)
-        if int(end_hour_sb.get()) == int(start_date[1]):
-            end_min_sb.config(from_=int(start_date[2]), to=59)
-            if int(end_min_sb.get()) == int(start_date[2]):
-                end_sec_sb.config(from_=int(start_date[3]), to=59)
-            else:
-                end_sec_sb.config(from_=0, to=59)
-        else:
-            end_min_sb.config(from_=0, to=59)
-            end_sec_sb.config(from_=0, to=59)
+        end_min_sb.config(from_=int(start_date[2]), to=59)
+        end_sec_sb.config(from_=int(start_date[3]), to=59)
     else:
-        end_hour_sb.config(from_=0, to=23)
-        end_min_sb.config(from_=0, to=59)
-        end_sec_sb.config(from_=0, to=59)
+        # Reset the spinbox values to 0
+        end_hour_sb.delete(0, 'end')
+        end_hour_sb.insert(0, '0')
+        end_min_sb.delete(0, 'end')
+        end_min_sb.insert(0, '0')
+        end_sec_sb.delete(0, 'end')
+        end_sec_sb.insert(0, '0')
 
 # Welcome frame
 welcome_frame = Frame(ws, bg=bg_color)
-welcome_msg = Label(welcome_frame, text="Welcome", font=("Times", 30), bg=bg_color, fg=font_color)
-welcome_msg.pack(pady=20)
+welcome_msg = Label(welcome_frame, text="COUNTDOWN TIMER", font=("Lexend", 30, "bold"), bg=bg_color, fg=font_color)
+welcome_msg.pack(pady=(150, 20))
 
-start_btn = Button(welcome_frame, text="Start Program", command=start_program, padx=20, pady=10, bg="white", fg="black")
+start_btn = Button(welcome_frame, text="START", command=start_program, padx=20, pady=10, font=("Lexend", 20), bg="white", fg="black")
 start_btn.pack(pady=10)
 
-exit_btn = Button(welcome_frame, text="Exit Program", command=exit_program, padx=20, pady=10, bg="white", fg="black")
+exit_btn = Button(welcome_frame, text="EXIT", command=exit_program, padx=20, pady=10, font=("Lexend", 20), bg="white", fg="black")
 exit_btn.pack(pady=10)
 
 welcome_frame.pack()
@@ -148,6 +152,7 @@ end_date_picker_frame = Frame(ws, bg=bg_color)
 end_cal = Calendar(end_date_picker_frame, selectmode="day", year=2024, month=5, day=1, background='white', foreground='black')
 end_cal.pack(pady=20)
 
+# Clock boxes
 end_hour_sb = Spinbox(end_date_picker_frame, from_=0, to=23, wrap=True, font=f, width=2, justify=CENTER)
 end_min_sb = Spinbox(end_date_picker_frame, from_=0, to=59, wrap=True, font=f, width=2, justify=CENTER)
 end_sec_sb = Spinbox(end_date_picker_frame, from_=0, to=59, wrap=True, font=f, width=2, justify=CENTER)
@@ -156,6 +161,7 @@ end_hour_sb.pack(side=LEFT, fill=X, expand=True, padx=5)
 end_min_sb.pack(side=LEFT, fill=X, expand=True, padx=5)
 end_sec_sb.pack(side=LEFT, fill=X, expand=True, padx=5)
 
+# Calling function when date on tkcalendar is changed
 end_hour_sb.bind('<Configure>', update_time_limits)
 end_min_sb.bind('<Configure>', update_time_limits)
 end_sec_sb.bind('<Configure>', update_time_limits)
@@ -168,6 +174,14 @@ confirm_end_btn.pack(pady=20)
 result_frame = Frame(ws, bg=bg_color)
 timer_display = Label(result_frame, text="", font=("Times", 15), bg=bg_color, fg=font_color)
 timer_display.pack(pady=20)
+
+# Restart button in the result frame
+restart_btn = Button(result_frame, text="Restart Program", command=restart_program, padx=20, pady=10, bg="white", fg="black")
+restart_btn.pack(pady=10)
+
+# Exit button in the result frame
+exit_timer_btn = Button(result_frame, text="Exit Program", command=exit_program, padx=20, pady=10, bg="white", fg="black")
+exit_timer_btn.pack(pady=10)
 
 # Start the Tkinter event loop
 ws.mainloop()
