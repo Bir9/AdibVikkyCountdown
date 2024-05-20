@@ -14,6 +14,7 @@ ws.config(bg="#1B263B")
 f = ('Lexend', 20)
 font_color = "white"
 bg_color = "#1B263B"
+theme_color = "#EDEDE9"
 
 # Variables for storing date and time
 start_date = []
@@ -129,17 +130,17 @@ welcome_frame = Frame(ws, bg=bg_color)
 welcome_msg = Label(welcome_frame, text="COUNTDOWN TIMER", font=("Lexend", 30, "bold"), bg=bg_color, fg=font_color)
 welcome_msg.grid(column=0, row=0, pady=(0, 20))
 
-start_btn = Button(welcome_frame, text="START", command=start_program, padx=28, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
+start_btn = Button(welcome_frame, text="START", command=start_program, padx=28, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 start_btn.grid(column=0, row=1, pady=(10, 5))
 
-exit_btn = Button(welcome_frame, text="EXIT", command=exit_program, padx=36, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
+exit_btn = Button(welcome_frame, text="EXIT", command=exit_program, padx=36, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 exit_btn.grid(column=0, row=2)
 
 welcome_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # Date picker frame for start date
 date_picker_frame = Frame(ws, bg=bg_color)
-start_cal = Calendar(date_picker_frame, selectmode="day", year=2024, month=5, day=1, font=("Lexend", 21), background='#EDEDE9', foreground='black')
+start_cal = Calendar(date_picker_frame, selectmode="day", year=2024, month=5, day=1, font=("Lexend", 21), background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
 start_cal.grid(column=0, row=0, padx=130, pady=(40, 0))
 
 time_units_frame = Frame(date_picker_frame, bg=bg_color)
@@ -152,20 +153,20 @@ spinbox_frame = Frame(date_picker_frame, bg=bg_color)
 spinbox_frame.grid(column=0, row=2)
 
 # Clock boxes
-hour_sb = Spinbox(spinbox_frame, from_=0, to=23, wrap=True, font=f, width=9, justify=CENTER, bg="#EDEDE9")
-min_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg="#EDEDE9")
-sec_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg="#EDEDE9")
+hour_sb = Spinbox(spinbox_frame, from_=0, to=23, wrap=True, font=f, width=9, justify=CENTER, bg=theme_color)
+min_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg=theme_color)
+sec_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg=theme_color)
 
 hour_sb.grid(column=0, row=1, padx=3, pady=(0,5))
 min_sb.grid(column=1, row=1, padx=3, pady=(0, 5))
 sec_sb.grid(column=2, row=1, padx=3, pady=(0, 5))
 
-confirm_start_btn = Button(date_picker_frame, text="CONFIRM", command=confirm_start_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
+confirm_start_btn = Button(date_picker_frame, text="CONFIRM", command=confirm_start_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 confirm_start_btn.grid(column=0, row=3, pady=10)
 
 # Date picker frame for end date
 end_date_picker_frame = Frame(ws, bg=bg_color)
-end_cal = Calendar(end_date_picker_frame, selectmode="day", year=2024, month=5, day=1, font=("Lexend", 21), background='#EDEDE9', foreground='black')
+end_cal = Calendar(end_date_picker_frame, selectmode="day", year=2024, month=5, day=1, font=("Lexend", 21), background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
 end_cal.grid(column=0, row=0, padx=130, pady=(40, 0))
 
 time_units_frame = Frame(end_date_picker_frame, bg=bg_color)
@@ -178,9 +179,9 @@ spinbox_frame = Frame(end_date_picker_frame, bg=bg_color)
 spinbox_frame.grid(column=0, row=2)
 
 # Clock boxes
-end_hour_sb = Spinbox(spinbox_frame, from_=0, to=23, wrap=True, font=f, width=9, justify=CENTER, bg="#EDEDE9")
-end_min_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg="#EDEDE9")
-end_sec_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg="#EDEDE9")
+end_hour_sb = Spinbox(spinbox_frame, from_=0, to=23, wrap=True, font=f, width=9, justify=CENTER, bg=theme_color)
+end_min_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg=theme_color)
+end_sec_sb = Spinbox(spinbox_frame, from_=0, to=59, wrap=True, font=f, width=9, justify=CENTER, bg=theme_color)
 
 end_hour_sb.grid(column=0, row=1, padx=3, pady=(0, 5))
 end_min_sb.grid(column=1, row=1, padx=3, pady=(0, 5))
@@ -192,7 +193,7 @@ end_min_sb.bind('<Configure>', update_time_limits)
 end_sec_sb.bind('<Configure>', update_time_limits)
 end_cal.bind("<<CalendarSelected>>", update_time_limits)
 
-confirm_end_btn = Button(end_date_picker_frame, text="CONFIRM", command=confirm_end_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
+confirm_end_btn = Button(end_date_picker_frame, text="CONFIRM", command=confirm_end_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 confirm_end_btn.grid(column=0, row=3, pady=10)
 
 # Result frame
@@ -201,11 +202,11 @@ timer_display = Label(result_frame, text="", font=("Lexend", 25, "bold"), bg=bg_
 timer_display.grid(column=0, row=0, pady=(0, 20))
 
 # Restart button in the result frame
-restart_btn = Button(result_frame, text="RESTART", command=restart_program, padx=20, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
+restart_btn = Button(result_frame, text="RESTART", command=restart_program, padx=20, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 restart_btn.grid(column=0, row=0, pady=(10, 5))
 
 # Exit button in the result frame
-exit_timer_btn = Button(result_frame, text="EXIT", command=exit_program, padx=40, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
+exit_timer_btn = Button(result_frame, text="EXIT", command=exit_program, padx=40, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 exit_timer_btn.grid(column=0, row=0)
 
 # Start the Tkinter event loop
