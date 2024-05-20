@@ -161,7 +161,7 @@ min_sb.grid(column=1, row=1, padx=3, pady=(0, 5))
 sec_sb.grid(column=2, row=1, padx=3, pady=(0, 5))
 
 confirm_start_btn = Button(date_picker_frame, text="CONFIRM", command=confirm_start_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
-confirm_start_btn.grid(column=0, row=3)
+confirm_start_btn.grid(column=0, row=3, pady=10)
 
 # Date picker frame for end date
 end_date_picker_frame = Frame(ws, bg=bg_color)
@@ -193,7 +193,7 @@ end_sec_sb.bind('<Configure>', update_time_limits)
 end_cal.bind("<<CalendarSelected>>", update_time_limits)
 
 confirm_end_btn = Button(end_date_picker_frame, text="CONFIRM", command=confirm_end_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
-confirm_end_btn.grid(column=0, row=3)
+confirm_end_btn.grid(column=0, row=3, pady=10)
 
 # Result frame
 result_frame = Frame(ws, bg=bg_color)
