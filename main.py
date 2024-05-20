@@ -21,12 +21,12 @@ end_date = []
 
 # Function to switch to the main program
 def start_program():
-    welcome_frame.pack_forget()
-    date_picker_frame.place(x=0, y=0)
+    welcome_frame.place_forget()
+    date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 def restart_program():
-    result_frame.pack_forget()
-    date_picker_frame.place(x=0, y=0)
+    result_frame.place_forget()
+    date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # Function to exit the program
 def exit_program():
@@ -52,7 +52,7 @@ def confirm_start_date():
     # Disable dates before start date in the end date calendar
     end_cal.config(mindate=start_date_only)
     date_picker_frame.place_forget()
-    end_date_picker_frame.place(x=0, y=0)
+    end_date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # Function to confirm the end date and start the countdown timer
 def confirm_end_date():
@@ -71,7 +71,7 @@ def confirm_end_date():
     end_date.extend([end_date_obj.strftime("%m/%d/%Y"), h, m, s])
 
     end_date_picker_frame.place_forget()
-    result_frame.pack()
+    result_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
     start_countdown_timer()
 
 def start_countdown_timer():
@@ -92,10 +92,10 @@ def start_countdown_timer():
 
         time_str = f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds"
         timer_display.config(text=time_str)
-        timer_display.pack()
+        timer_display.grid(column=0, row=0)
         
-        restart_btn.pack()
-        exit_timer_btn.pack()
+        restart_btn.grid(column=0, row=1)
+        exit_timer_btn.grid(column=0, row=2)
 
         ws.update()
         sleep(1)
@@ -127,15 +127,15 @@ def update_time_limits(*args):
 # Welcome frame
 welcome_frame = Frame(ws, bg=bg_color)
 welcome_msg = Label(welcome_frame, text="COUNTDOWN TIMER", font=("Lexend", 30, "bold"), bg=bg_color, fg=font_color)
-welcome_msg.pack(pady=(165, 20))
+welcome_msg.grid(column=0, row=0, pady=(0, 20))
 
 start_btn = Button(welcome_frame, text="START", command=start_program, padx=28, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
-start_btn.pack(pady=(10, 5))
+start_btn.grid(column=0, row=1, pady=(10, 5))
 
 exit_btn = Button(welcome_frame, text="EXIT", command=exit_program, padx=36, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
-exit_btn.pack()
+exit_btn.grid(column=0, row=2)
 
-welcome_frame.pack()
+welcome_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # Date picker frame for start date
 date_picker_frame = Frame(ws, bg=bg_color)
@@ -198,15 +198,15 @@ confirm_end_btn.grid(column=0, row=3, pady=10)
 # Result frame
 result_frame = Frame(ws, bg=bg_color)
 timer_display = Label(result_frame, text="", font=("Lexend", 25, "bold"), bg=bg_color, fg=font_color)
-timer_display.pack(pady=(165, 20))
+timer_display.grid(column=0, row=0, pady=(0, 20))
 
 # Restart button in the result frame
 restart_btn = Button(result_frame, text="RESTART", command=restart_program, padx=20, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
-restart_btn.pack(pady=(10, 5))
+restart_btn.grid(column=0, row=0, pady=(10, 5))
 
 # Exit button in the result frame
 exit_timer_btn = Button(result_frame, text="EXIT", command=exit_program, padx=40, pady=0, font=("Lexend", 12, "bold"), bg="#EDEDE9", fg="black")
-exit_timer_btn.pack()
+exit_timer_btn.grid(column=0, row=0)
 
 # Start the Tkinter event loop
 ws.mainloop()
