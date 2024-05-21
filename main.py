@@ -182,8 +182,8 @@ def update_calendar_from_entry(entry, calendar):
 
 # Update the entry when the calendar changes
 def update_entry_from_calendar(entry, calendar):
-    date_str = date_str = date_str_replace(calendar)
-    date_obj = datetime.strptime(date_str, "%m/%d/%y")
+    date_str = date_str_replace(calendar)
+    date_obj = datetime.strptime(date_str, "%m/%d/%Y")
     date_obj = date_obj.strftime("%m/%d/%Y")  # Use %Y for four-digit year
     
     entry.delete(0, END)
