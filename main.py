@@ -78,11 +78,15 @@ def confirm_start_date():
     # Convert to four-digit year format for storing
     start_date.clear()  # Clear any previous data
     start_date.extend([start_date_obj.strftime("%m/%d/%Y"), h, m, s])
-
     start_date_only = start_date_obj.date()
 
     # Disable dates before start date in the end date calendar
     end_cal.config(mindate=start_date_only)
+    
+    # Re-setting entry text color
+    end_date_entry.config(fg='grey')
+    
+    # Moving to next frame
     date_picker_frame.place_forget()
     end_date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
