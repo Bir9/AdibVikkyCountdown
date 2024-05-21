@@ -63,22 +63,31 @@ def restart_program():
 def exit_program():
     ws.destroy()
 
+def date_str_replace(cal):
+    date_str = cal.get_date()
+    date_str = date_str.replace("-", "/")
+    return date_str
+
 # Function to confirm the start date and switch to end date selection
 def confirm_start_date():
     global start_date_obj
-    date_str = start_cal.get_date()
+    
+    date_str = date_str_replace(start_cal)
+    
     h = hour_sb.get()
     m = min_sb.get()
     s = sec_sb.get()
 
     # Adapt the format to handle the two-digit year correctly
-    start_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%y %H:%M:%S")
+    start_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%Y %H:%M:%S")
 
     # Convert to four-digit year format for storing
     start_date.clear()  # Clear any previous data
     start_date.extend([start_date_obj.strftime("%m/%d/%Y"), h, m, s])
     start_date_only = start_date_obj.date()
 
+    print(start_date)
+    print(start_date_only)
     # Disable dates before start date in the end date calendar
     end_cal.config(mindate=start_date_only)
     
@@ -93,13 +102,14 @@ def confirm_start_date():
 def confirm_end_date():
     global end_date
 
-    date_str = end_cal.get_date()
+    date_str = date_str = date_str_replace(end_cal)
+    
     h = end_hour_sb.get()
     m = end_min_sb.get()
     s = end_sec_sb.get()
 
     # Adapt the format to handle the two-digit year correctly
-    end_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%y %H:%M:%S")
+    end_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%Y %H:%M:%S")
 
     # Convert to four-digit year format for storing
     end_date.clear()  # Clear any previous data
@@ -137,8 +147,9 @@ def start_countdown_timer():
 
 # Update the time limits for the end date
 def update_time_limits(*args):
-    end_date_str = end_cal.get_date()
-    end_date_time = datetime.strptime(end_date_str, "%m/%d/%y")
+    end_date_str = date_str_replace(end_cal)
+    
+    end_date_time = datetime.strptime(end_date_str, "%m/%d/%Y")
     
     if end_date_time.date() == start_date_obj.date():
         end_hour_sb.config(from_=int(start_date[1]), to=23)
@@ -171,7 +182,7 @@ def update_calendar_from_entry(entry, calendar):
 
 # Update the entry when the calendar changes
 def update_entry_from_calendar(entry, calendar):
-    date_str = calendar.get_date()
+    date_str = date_str = date_str_replace(calendar)
     date_obj = datetime.strptime(date_str, "%m/%d/%y")
     date_obj = date_obj.strftime("%m/%d/%Y")  # Use %Y for four-digit year
     
@@ -234,7 +245,7 @@ welcome_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 date_picker_frame = Frame(ws, bg=bg_color)
 
 # Calendar for start date
-start_cal = Calendar(date_picker_frame, selectmode="day", font=("Lexend", 21), background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
+start_cal = Calendar(date_picker_frame, selectmode="day", font=("Lexend", 21), date_pattern="mm-dd-yyyy", background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
 start_cal.selection_set(datetime.now())
 start_cal.grid(column=0, row=0, padx=130, pady=(12, 5))
 
@@ -246,11 +257,8 @@ start_date_entry.grid(column=0, row=1, pady=(15, 5))
 start_date_entry.insert(0, "mm/dd/yyyy")
 start_date_entry.config(fg='grey')
 
-time_units_frame = Frame(date_picker_frame, bg=bg_color)
-time_units_frame.grid(column=0, row=2)
-
-units_display = Label(time_units_frame, text="HRS                                MINS                               SECS   ", font=("Lexend", 12, "bold"), bg=bg_color, fg=font_color)
-units_display.grid(column=0, row=0, pady=(10, 0))
+units_display = Label(date_picker_frame, text="HRS                                MINS                               SECS   ", font=("Lexend", 12, "bold"), bg=bg_color, fg=font_color)
+units_display.grid(column=0, row=2, pady=(10, 0))
 
 spinbox_frame = Frame(date_picker_frame, bg=bg_color)
 spinbox_frame.grid(column=0, row=3)
@@ -277,7 +285,7 @@ start_cal.bind("<<CalendarSelected>>", lambda event: update_entry_from_calendar(
 end_date_picker_frame = Frame(ws, bg=bg_color)
 
 # Calendar for end date
-end_cal = Calendar(end_date_picker_frame, selectmode="day", font=("Lexend", 21), background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
+end_cal = Calendar(end_date_picker_frame, selectmode="day", font=("Lexend", 21), date_pattern="mm-dd-yyyy", background=theme_color, foreground=bg_color, headersforeground=bg_color, selectbackground=bg_color)
 end_cal.selection_set(datetime.now())
 end_cal.grid(column=0, row=0, padx=130, pady=(12, 5))
 
@@ -289,11 +297,8 @@ end_date_entry.grid(column=0, row=1, pady=(15, 5))
 end_date_entry.insert(0, "mm/dd/yyyy")
 end_date_entry.config(fg='grey')
 
-time_units_frame = Frame(end_date_picker_frame, bg=bg_color)
-time_units_frame.grid(column=0, row=2)
-
-units_display = Label(time_units_frame, text="HRS                                MINS                               SECS   ", font=("Lexend", 12, "bold"), bg=bg_color, fg=font_color)
-units_display.grid(column=0, row=0, pady=(10, 0))
+units_display = Label(end_date_picker_frame, text="HRS                                MINS                               SECS   ", font=("Lexend", 12, "bold"), bg=bg_color, fg=font_color)
+units_display.grid(column=0, row=2, pady=(10, 0))
 
 spinbox_frame = Frame(end_date_picker_frame, bg=bg_color)
 spinbox_frame.grid(column=0, row=3)
