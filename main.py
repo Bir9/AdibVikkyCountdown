@@ -28,7 +28,36 @@ def start_program():
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 def restart_program():
+    # Clear saved data
+    start_date.clear()
+    end_date.clear()
+
+    # Reset calendar selections
+    start_cal.selection_set(datetime.now())
+    end_cal.selection_set(datetime.now())
+    
+    # Update date box after reseting calendar selection
+    update_entry_from_calendar(start_date_entry, start_cal)
+    update_entry_from_calendar(end_date_entry, end_cal)
+
+    # Reset spinbox values
+    hour_sb.delete(0, 'end')
+    hour_sb.insert(0, '0')
+    min_sb.delete(0, 'end')
+    min_sb.insert(0, '0')
+    sec_sb.delete(0, 'end')
+    sec_sb.insert(0, '0')
+    end_hour_sb.delete(0, 'end')
+    end_hour_sb.insert(0, '0')
+    end_min_sb.delete(0, 'end')
+    end_min_sb.insert(0, '0')
+    end_sec_sb.delete(0, 'end')
+    end_sec_sb.insert(0, '0')
+    
+    # Hide result frame
     result_frame.place_forget()
+    
+    # Re-show date picker frame
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # Function to exit the program
