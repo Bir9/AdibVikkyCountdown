@@ -71,7 +71,7 @@ def timerDecreaser():
                 else:
                     if years!= 0:
                         years -= 1
-                        days = 365
+                        days = 364
                         hours = 23
                         minutes = 59
                         seconds = 59
