@@ -35,7 +35,7 @@ def restart_program():
     start_cal.selection_set(datetime.now())
     end_cal.selection_set(datetime.now())
     
-    # Update date box after reseting calendar selection
+    # Update date box after re-seting calendar selection
     update_entry_from_calendar(start_date_entry, start_cal)
     update_entry_from_calendar(end_date_entry, end_cal)
 
@@ -59,6 +59,35 @@ def restart_program():
     # Re-show date picker frame
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+# Function to handle invalid dates
+def handle_invalid_date(entry, button):
+    
+    entry.delete(0, 'end')
+    entry.insert(0, "mm/dd/yyyy")
+    entry.config(fg='grey')
+    # Flash the button red
+    original_color = button.cget("bg")
+    button.config(bg='red')
+    ws.after(500, lambda: button.config(bg=original_color))
+
+def check_for_invalid_date(entry, cal, btn, start_end):
+    date_str = entry.get()
+    try:
+        date_obj = datetime.strptime(date_str, "%m/%d/%Y")
+        cal.selection_set(date_obj)
+        # Check if the date is valid and after the start date
+        if start_end == "end":
+            if date_obj < start_date_obj:
+                handle_invalid_date(entry, btn)
+                return False
+            else:
+                cal.selection_set(date_obj)
+                return True
+        
+    except ValueError:
+        handle_invalid_date(entry, btn)
+        return False
+
 # Function to exit the program
 def exit_program():
     ws.destroy()
@@ -80,14 +109,15 @@ def confirm_start_date():
 
     # Adapt the format to handle the two-digit year correctly
     start_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%Y %H:%M:%S")
+    
+    if check_for_invalid_date(start_date_entry, start_cal, confirm_start_btn, "start") == False:
+        return
 
     # Convert to four-digit year format for storing
     start_date.clear()  # Clear any previous data
     start_date.extend([start_date_obj.strftime("%m/%d/%Y"), h, m, s])
     start_date_only = start_date_obj.date()
 
-    print(start_date)
-    print(start_date_only)
     # Disable dates before start date in the end date calendar
     end_cal.config(mindate=start_date_only)
     
@@ -101,8 +131,12 @@ def confirm_start_date():
 # Function to confirm the end date and start the countdown timer
 def confirm_end_date():
     global end_date
+    
+    if check_for_invalid_date(end_date_entry, end_cal, confirm_end_btn, "end") == False:
+        return
 
-    date_str = date_str = date_str_replace(end_cal)
+    date_str = date_str_replace(end_cal)
+    #entry_date_str = end_date_entry.get()
     
     h = end_hour_sb.get()
     m = end_min_sb.get()
@@ -110,7 +144,8 @@ def confirm_end_date():
 
     # Adapt the format to handle the two-digit year correctly
     end_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%Y %H:%M:%S")
-
+    #entry_date_obj = datetime.strptime(entry_date_str, "%m/%d/%Y")
+    
     # Convert to four-digit year format for storing
     end_date.clear()  # Clear any previous data
     end_date.extend([end_date_obj.strftime("%m/%d/%Y"), h, m, s])
@@ -202,14 +237,6 @@ def focus_out_start(event):
         start_date_entry.insert(0, "mm/dd/yyyy")
         start_date_entry.config(fg='grey')
 
-def update_start_cal(event):
-    try:
-        date_str = start_date_entry.get()
-        date_obj = datetime.strptime(date_str, "%m/%d/%Y")
-        start_cal.set_date(date_obj)
-    except ValueError:
-        pass  # Ignore invalid dates
-
 def focus_in_end(event):
     if end_date_entry.get() == "mm/dd/yyyy":
         end_date_entry.delete(0, 'end')
@@ -219,14 +246,6 @@ def focus_out_end(event):
     if end_date_entry.get() == "":
         end_date_entry.insert(0, "mm/dd/yyyy")
         end_date_entry.config(fg='grey')
-
-def update_end_cal(event):
-    try:
-        date_str = end_date_entry.get()
-        date_obj = datetime.strptime(date_str, "%m/%d/%Y")
-        end_cal.set_date(date_obj)
-    except ValueError:
-        pass  # Ignore invalid dates
 
 # Welcome frame
 welcome_frame = Frame(ws, bg=bg_color)
@@ -277,7 +296,7 @@ confirm_start_btn.grid(column=0, row=4, pady=10)
 
 # Calling functions based on inputs received
 start_date_entry.bind("<FocusIn>", focus_in_start)
-start_date_entry.bind("<FocusOut>", focus_out_start or update_start_cal)
+start_date_entry.bind("<FocusOut>", focus_out_start)
 start_date_entry.bind('<KeyRelease>', lambda event: update_calendar_from_entry(start_date_entry, start_cal))
 start_cal.bind("<<CalendarSelected>>", lambda event: update_entry_from_calendar(start_date_entry, start_cal))
 
@@ -323,7 +342,7 @@ confirm_end_btn.grid(column=0, row=4, pady=10)
 
 # Bind the end entry and calendar to synchronize
 end_date_entry.bind("<FocusIn>", focus_in_end)
-end_date_entry.bind("<FocusOut>", focus_out_end or update_end_cal)
+end_date_entry.bind("<FocusOut>", focus_out_end)
 end_date_entry.bind('<KeyRelease>', lambda event: update_calendar_from_entry(end_date_entry, end_cal))
 end_cal.bind("<<CalendarSelected>>", lambda event: update_entry_from_calendar(end_date_entry, end_cal))
 
