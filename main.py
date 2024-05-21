@@ -10,7 +10,6 @@ ws.title("Countdown Timer")
 ws.geometry("850x550")
 ws.minsize(850, 550)
 ws.config(bg="#1B263B")
-ws.resizable(width=1000, height=700)
 
 # Fonts and colors
 f = ('Lexend', 20)
