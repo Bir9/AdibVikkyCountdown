@@ -195,7 +195,6 @@ def start_countdown_timer():
 # Update the time limits for the end date
 def update_time_limits(*args):
     end_date_str = date_str_replace(end_cal)
-    
     end_date_time = datetime.strptime(end_date_str, "%m/%d/%Y")
     
     if end_date_time.date() == start_date_obj.date():
@@ -258,6 +257,10 @@ def focus_out_end(event):
     if end_date_entry.get() == "":
         end_date_entry.insert(0, "mm/dd/yyyy")
         end_date_entry.config(fg='grey')
+        
+def combined_end_cal_handler(event):
+    update_entry_from_calendar(end_date_entry, end_cal)
+    update_time_limits()
 
 # Welcome frame
 welcome_frame = Frame(ws, bg=bg_color)
@@ -347,7 +350,7 @@ end_sec_sb.grid(column=2, row=1, padx=3, pady=(0, 5))
 end_hour_sb.bind('<Configure>', update_time_limits)
 end_min_sb.bind('<Configure>', update_time_limits)
 end_sec_sb.bind('<Configure>', update_time_limits)
-end_cal.bind("<<CalendarSelected>>", update_time_limits)
+end_cal.bind("<<CalendarSelected>>", combined_end_cal_handler)
 
 confirm_end_btn = Button(end_date_picker_frame, text="CONFIRM", command=confirm_end_date, padx=0, pady=0, font=("Lexend", 12, "bold"), bg=theme_color, fg="black")
 confirm_end_btn.grid(column=0, row=4, pady=10)
@@ -356,7 +359,6 @@ confirm_end_btn.grid(column=0, row=4, pady=10)
 end_date_entry.bind("<FocusIn>", focus_in_end)
 end_date_entry.bind("<FocusOut>", focus_out_end)
 end_date_entry.bind('<KeyRelease>', lambda event: update_calendar_from_entry(end_date_entry, end_cal))
-end_cal.bind("<<CalendarSelected>>", lambda event: update_entry_from_calendar(end_date_entry, end_cal))
 
 # Result frame
 result_frame = Frame(ws, bg=bg_color)
