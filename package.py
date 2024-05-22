@@ -48,9 +48,9 @@ def timeDifference(start, end):
     return years, days, hours, minutes, seconds
 
 # Decreases the seconds by one if possible, otherwise we check if we can carry seconds over from minutes, hours, days and years
-def timerDecreaser():
+def timerDecreaser(end):
     global years, days, hours, minutes, seconds
-    
+            
     if seconds != 0:
         seconds -= 1
     else:
@@ -70,27 +70,23 @@ def timerDecreaser():
                     seconds = 59
                 else:
                     if years!= 0:
+                        numDays = checkLeapYear(int(end[2]) - years)
                         years -= 1
-                        days = 364
+                        days = numDays
                         hours = 23
                         minutes = 59
                         seconds = 59
-                    else:
-                        return print("user input error")
-                    
+
     return years, days, hours, minutes, seconds
 
 def checkLeapYear(year):
     if year % 4 == 0: # Checks if the year is divisble by 4
         if year % 100 == 0:
             if year % 400 == 0: # Checks to wee if century years like 1700 or 1900 are leap years
-                return True
+                return 366
             else:
-                return False
+                return 365
         else:
-            return True
+            return 366
     else:
-        return False
-
-
-print(checkLeapYear(1900))
+        return 365

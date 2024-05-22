@@ -30,6 +30,11 @@ def start_program():
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 def restart_program():
+    global timeCheck
+    
+    # timeDecreaser break
+    timeCheck = False
+    
     # Clear saved data
     start_date.clear()
     end_date.clear()
@@ -133,7 +138,7 @@ def confirm_start_date():
 
 # Function to confirm the end date and start the countdown timer
 def confirm_end_date():
-    global end_date
+    global end_date, timeCheck
     
     if check_for_invalid_date(end_date_entry, end_cal, confirm_end_btn, "end") == False:
         return
@@ -155,33 +160,37 @@ def confirm_end_date():
 
     end_date_picker_frame.place_forget()
     result_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+    
+    timeCheck = True
     start_countdown_timer()
 
 def start_countdown_timer():
-    global start_date, end_date
+    global start_date, end_date, timeCheck
     
-    if start_date == end_date:
-        years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
-    else:
-        years, days, hours, minutes, seconds = timeDifference(start_date, end_date)
-
-    while seconds != -1:  # Keep running the loop until there are 0 seconds left
+    while timeCheck == True:
         if start_date == end_date:
-            # If start and end dates are equal, keep the timer variables at 0
             years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
         else:
-            # Otherwise, decrement the timer variables
-            years, days, hours, minutes, seconds = timerDecreaser()  # Re-assigning the counter after decreasing it by 1 second
+            years, days, hours, minutes, seconds = timeDifference(start_date, end_date)
 
-        time_str = f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds"
-        timer_display.config(text=time_str)
-        timer_display.grid(column=0, row=0)
-        
-        restart_btn.grid(column=0, row=1)
-        exit_timer_btn.grid(column=0, row=2)
+        while seconds != -1:  # Keep running the loop until there are 0 seconds left
+            if start_date == end_date:
+                # If start and end dates are equal, keep the timer variables at 0
+                years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
+            else:
+                # Otherwise, decrement the timer variables
+                years, days, hours, minutes, seconds = timerDecreaser(end_date)  # Re-assigning the counter after decreasing it by 1 second
 
-        ws.update()
-        sleep(1)
+            time_str = f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds"
+            timer_display.config(text=time_str)
+            timer_display.grid(column=0, row=0)
+            
+            restart_btn.grid(column=0, row=1)
+            exit_timer_btn.grid(column=0, row=2)
+
+            ws.update()
+            sleep(1)
+    print("stopped")
 
 # Update the time limits for the end date
 def update_time_limits(*args):
