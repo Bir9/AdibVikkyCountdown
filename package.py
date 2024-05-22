@@ -82,9 +82,15 @@ def timerDecreaser():
 
 def checkLeapYear(year):
     if year % 4 == 0: # Checks if the year is divisble by 4
-        if year % 400 == 0: # Checks to wee if century years like 1700 or 1900 are leap years
-            return True
+        if year % 100 == 0:
+            if year % 400 == 0: # Checks to wee if century years like 1700 or 1900 are leap years
+                return True
+            else:
+                return False
         else:
-            return False
+            return True
     else:
         return False
+
+
+print(checkLeapYear(1900))
