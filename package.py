@@ -1,92 +1,69 @@
-# Creating a dictionary to store the number of days in each month
-daysInMonthDict = {
-    "1": 31, "2": 28, "3": 31, "4": 30,
-    "5": 31, "6": 30, "7": 31, "8": 31,
-    "9": 30, "10": 31, "11": 30, "0": 31 #0 was used as the key as 12%12 = 0
-}
+from datetime import datetime, timedelta
 
 # Function to calculate the difference between two dates
-def timeDifference(start, end):
-    startDate = start[0].split('/') # Seperating the month, day and year into another list
-    
-    endDate = end[0].split('/') # Similar to code above but for end date
-    
+def time_difference(start, end):
     global years, days, hours, minutes, seconds # Making variables global so other functions can use them
     
-    years = int(endDate[2]) - int(startDate[2]) # Getting the difference in years between both dates
-    months = int(endDate[0]) - int(startDate[0]) # Getting the difference in months between both dates
-    days = 0 # Creating a days variable
+    delta = end - start
+    leap_days = count_leap_years(start.year, end.year)
     
-    if months < 0: # Checking to see if the end date's month is before the start date's month
-        years -= 1
-        months += 12
+    years = delta.days // 365
+    remaining_days = delta.days % 365
     
-    # Adding up all the days in every month between our start month and end month
-    for i in range(months): # Looping for however many months there are in between both dates
-        j = i + int(startDate[0]) # Assigning j to be our index i plus our starting month number (0 + Jan(1) => Jan(1), 1 + Jan(1) => Feb(2))
-        days += daysInMonthDict[str(j%12)] # Makes sure that even if j > 12 it can still be used as a key
+    # Loop until the remaining days is less than the number of days in a year
+    while True:
+        # Check if the current year is a leap year
+        if check_leap_year(start.year + years):
+            # If it is a leap year, check if the remaining days is greater than or equal to 366
+            if remaining_days >= 366:
+                # If it is, subtract 366 from the remaining days
+                remaining_days -= 366
+            else:
+                # If it's not, break the loop
+                break
+        else:
+            # If it's not a leap year, check if the remaining days is greater than or equal to 365
+            if remaining_days >= 365:
+                # If it is, subtract 365 from the remaining days
+                remaining_days -= 365
+            else:
+                # If it's not, break the loop
+                break
+        # Increment the number of years
+        years += 1
     
-    days += int(endDate[1]) - int(startDate[1]) # Getting the difference in days between both dates and adding it to our pre-existing variable
-    hours = int(end[1]) - int(start[1]) # Getting the difference in hours between both dates
-    minutes = int(end[2]) - int(start[2]) # Getting the difference in minutes between both dates
-    seconds = int(end[3]) - int(start[3]) # Getting the difference in seconds between both dates
+    total_seconds = delta.seconds
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
     
-    # Similar to what we did for checking if our end date's month is before our start date's month we now do it for the days, hours, minutes, and seconds variables
-    if seconds < 0:
-        minutes -= 1
-        seconds += 60
-    if minutes < 0:
-        hours -= 1
-        minutes += 60
-    if hours < 0:
-        days -= 1
-        hours += 24
-    if days < 0:
-        years -= 1
-        days += 365
-    
-    return years, days, hours, minutes, seconds
+    return years, remaining_days, hours, minutes, seconds
 
 # Decreases the seconds by one if possible, otherwise we check if we can carry seconds over from minutes, hours, days and years
-def timerDecreaser(end):
-    global years, days, hours, minutes, seconds
-            
-    if seconds != 0:
-        seconds -= 1
-    else:
-        if minutes != 0:
-            minutes -= 1
-            seconds = 59
-        else:
-            if hours!= 0:
-                hours -= 1
-                minutes = 59
-                seconds = 59
-            else:
-                if days!= 0:
-                    days -= 1
-                    hours = 23
-                    minutes = 59
-                    seconds = 59
-                else:
-                    if years!= 0:
-                        numDays = checkLeapYear(int(end[2]) - years)
-                        years -= 1
-                        days = numDays
-                        hours = 23
-                        minutes = 59
-                        seconds = 59
+def timer_decreaser(start, end):
+    # Decrease the end time by one second
+    end -= timedelta(seconds=1)
+    
+    # Calculate the new time difference
+    years, days, hours, minutes, seconds = time_difference(start, end)
+    
+    return years, days, hours, minutes, seconds, end
 
-    return years, days, hours, minutes, seconds
-
-def checkLeapYear(year):
+def check_leap_year(year):
     if year % 4 == 0: # Checks if the year is divisble by 4
         if year % 100 == 0:
             if year % 400 == 0: # Checks to wee if century years like 1700 or 1900 are leap years
-                return 366
+                return True
             else:
-                return 365
+                return False
         else:
-            return 366
+            return True
     else:
-        return 365
+        return False
+
+def count_leap_years(start_year, end_year):
+    leap_days = 0
+    for year in range(start_year, end_year):
+        if check_leap_year(year):
+            leap_days += 1
+    return leap_days

@@ -6,7 +6,6 @@ from datetime import datetime
 
 # venv activation bash: source $HOME/.venvs/MyEnv/activate
 
-
 # Initialize the main window
 ws = Tk()
 ws.title("Countdown Timer")
@@ -20,25 +19,12 @@ font_color = "white"
 bg_color = "#1B263B"
 theme_color = "#EDEDE9"
 
-# Variables for storing date and time
-start_date = []
-end_date = []
-
 # Function to switch to the main program
 def start_program():
     welcome_frame.place_forget()
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 def restart_program():
-    global timeCheck
-    
-    # timeDecreaser break
-    timeCheck = False
-    
-    # Clear saved data
-    start_date.clear()
-    end_date.clear()
-
     # Reset calendar selections
     start_cal.selection_set(datetime.now())
     end_cal.selection_set(datetime.now())
@@ -121,13 +107,8 @@ def confirm_start_date():
     if check_for_invalid_date(start_date_entry, start_cal, confirm_start_btn, "start") == False:
         return
 
-    # Convert to four-digit year format for storing
-    start_date.clear()  # Clear any previous data
-    start_date.extend([start_date_obj.strftime("%m/%d/%Y"), h, m, s])
-    start_date_only = start_date_obj.date()
-
     # Disable dates before start date in the end date calendar
-    end_cal.config(mindate=start_date_only)
+    end_cal.config(mindate=start_date_obj.date())
     
     # Re-setting entry text color
     end_date_entry.config(fg='grey')
@@ -138,7 +119,7 @@ def confirm_start_date():
 
 # Function to confirm the end date and start the countdown timer
 def confirm_end_date():
-    global end_date, timeCheck
+    global end_date_obj
     
     if check_for_invalid_date(end_date_entry, end_cal, confirm_end_btn, "end") == False:
         return
@@ -152,11 +133,6 @@ def confirm_end_date():
 
     # Adapt the format to handle the two-digit year correctly
     end_date_obj = datetime.strptime(f"{date_str} {h}:{m}:{s}", "%m/%d/%Y %H:%M:%S")
-    #entry_date_obj = datetime.strptime(entry_date_str, "%m/%d/%Y")
-    
-    # Convert to four-digit year format for storing
-    end_date.clear()  # Clear any previous data
-    end_date.extend([end_date_obj.strftime("%m/%d/%Y"), h, m, s])
 
     end_date_picker_frame.place_forget()
     result_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -165,21 +141,21 @@ def confirm_end_date():
     start_countdown_timer()
 
 def start_countdown_timer():
-    global start_date, end_date, timeCheck
+    global start_date_obj, end_date_obj
     
-    while timeCheck == True:
-        if start_date == end_date:
+    while True:
+        if start_date_obj == end_date_obj:
             years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
         else:
-            years, days, hours, minutes, seconds = timeDifference(start_date, end_date)
+            years, days, hours, minutes, seconds = time_difference(start_date_obj, end_date_obj)
 
         while seconds != -1:  # Keep running the loop until there are 0 seconds left
-            if start_date == end_date:
+            if start_date_obj == end_date_obj:
                 # If start and end dates are equal, keep the timer variables at 0
                 years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
             else:
                 # Otherwise, decrement the timer variables
-                years, days, hours, minutes, seconds = timerDecreaser(end_date)  # Re-assigning the counter after decreasing it by 1 second
+                years, days, hours, minutes, seconds, end_date_obj = timer_decreaser(start_date_obj, end_date_obj)  # Re-assigning the counter after decreasing it by 1 second
 
             time_str = f"{years} years {days} days {hours} hours {minutes} minutes {seconds} seconds"
             timer_display.config(text=time_str)
@@ -198,11 +174,11 @@ def update_time_limits(*args):
     end_date_time = datetime.strptime(end_date_str, "%m/%d/%Y")
     
     if end_date_time.date() == start_date_obj.date():
-        end_hour_sb.config(from_=int(start_date[1]), to=23)
-        if int(end_hour_sb.get()) == int(start_date[1]):
-            end_min_sb.config(from_=int(start_date[2]), to=59)
-            if int(end_min_sb.get()) == int(start_date[2]):
-                end_sec_sb.config(from_=int(start_date[3]), to=59)
+        end_hour_sb.config(from_=int(start_date_obj.hour), to=23)
+        if int(end_hour_sb.get()) == int(start_date_obj.hour):
+            end_min_sb.config(from_=int(start_date_obj.minute), to=59)
+            if int(end_min_sb.get()) == int(start_date_obj.minute):
+                end_sec_sb.config(from_=int(start_date_obj.second), to=59)
     else:
         end_hour_sb.config(from_=0, to=23)
         end_min_sb.config(from_=0, to=59)
