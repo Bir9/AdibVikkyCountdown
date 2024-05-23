@@ -19,19 +19,30 @@ font_color = "white"
 bg_color = "#1B263B"
 theme_color = "#EDEDE9"
 
+# Variable to stop countdown timer once user click restart button
+stop_timer = False
+
 # Function to switch to the main program
 def start_program():
     welcome_frame.place_forget()
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 def restart_program():
+    # Stop the countdown timer
+    stop_countdown_timer(True)
+    
     # Reset calendar selections
     start_cal.selection_set(datetime.now())
     end_cal.selection_set(datetime.now())
     
-    # Update date box after re-seting calendar selection
-    update_entry_from_calendar(start_date_entry, start_cal)
-    update_entry_from_calendar(end_date_entry, end_cal)
+    # Reset date box
+    start_date_entry.delete(0, 'end')
+    start_date_entry.insert(0, "mm/dd/yyyy")
+    start_date_entry.config(fg='grey')
+    
+    end_date_entry.delete(0, 'end')
+    end_date_entry.insert(0, "mm/dd/yyyy")
+    end_date_entry.config(fg='grey')
 
     # Reset spinbox values
     hour_sb.delete(0, 'end')
@@ -53,9 +64,13 @@ def restart_program():
     # Re-show date picker frame
     date_picker_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+# Function to stop the countdown timer
+def stop_countdown_timer(status):
+    global stop_timer
+    stop_timer = status
+    
 # Function to handle invalid dates
 def handle_invalid_date(entry, button):
-    
     entry.delete(0, 'end')
     entry.insert(0, "mm/dd/yyyy")
     entry.config(fg='grey')
@@ -84,6 +99,7 @@ def check_for_invalid_date(entry, cal, btn, start_end):
 
 # Function to exit the program
 def exit_program():
+    stop_countdown_timer(True)
     ws.destroy()
 
 def date_str_replace(cal):
@@ -141,15 +157,17 @@ def confirm_end_date():
     start_countdown_timer()
 
 def start_countdown_timer():
-    global start_date_obj, end_date_obj
+    global start_date_obj, end_date_obj, stop_timer
     
-    while True:
+    stop_countdown_timer(False)
+    
+    while stop_timer == False:
         if start_date_obj == end_date_obj:
             years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
         else:
             years, days, hours, minutes, seconds = time_difference(start_date_obj, end_date_obj)
 
-        while seconds != -1:  # Keep running the loop until there are 0 seconds left
+        while seconds != -1 and stop_timer == False:  # Keep running the loop until there are 0 seconds left
             if start_date_obj == end_date_obj:
                 # If start and end dates are equal, keep the timer variables at 0
                 years, days, hours, minutes, seconds = 0, 0, 0, 0, 0
@@ -166,7 +184,6 @@ def start_countdown_timer():
 
             ws.update()
             sleep(1)
-    print("stopped")
 
 # Update the time limits for the end date
 def update_time_limits(*args):
