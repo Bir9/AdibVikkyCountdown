@@ -1,10 +1,9 @@
+# Importing modules
 from package import *
 from tkinter import *
 from time import sleep
 from tkcalendar import Calendar
 from datetime import datetime
-
-# venv activation bash: source $HOME/.venvs/MyEnv/activate
 
 # Initialize the main window
 ws = Tk()

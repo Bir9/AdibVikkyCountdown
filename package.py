@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 # Function to calculate the difference between two dates
 def time_difference(start, end):
